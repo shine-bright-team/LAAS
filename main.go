@@ -32,6 +32,4 @@ func main() {
 	log.Print("Listening to port 8000")
 
 	app.Listen(":8000")
-
-	log.Print("App is ready")
 }
