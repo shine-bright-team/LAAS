@@ -2,26 +2,19 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"github.com/shine-bright-team/LAAS/v2/initialize"
 	"github.com/shine-bright-team/LAAS/v2/routes"
 )
 
 func main() {
 	app := fiber.New()
-	log.Print("Looking up env")
-	if mode, isfound := os.LookupEnv("MODE"); !isfound || mode == "DEV" {
-		log.Print("Coundn't find env, looking up .env file")
-		err := godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
+	initialize.LookForEnv()
 	log.Print("Connecting to DB")
-	initialize.DbSetUp()
+	if err := initialize.DbSetUp(); err != nil {
+		log.Fatalf("There is an error setting up Database: %s", err)
+	}
 
 	app.Get("/", routes.DefaultPage)
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/shine-bright-team/LAAS/v2/db"
-	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -13,7 +12,7 @@ import (
 func DbSetUp() error {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Bangkok", utils.GetEnv("DB_HOST"), utils.GetEnv("DB_USER"), utils.GetEnv("DB_PASSWORD"), utils.GetEnv("DB_POSTGRES"), utils.GetEnv("DB_PORT"))
 	db_ref, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	db_ref.AutoMigrate(&dbmodel.User{})
+	DatabaseMigration(db_ref)
 	db.DB = db_ref
 	return err
 }
