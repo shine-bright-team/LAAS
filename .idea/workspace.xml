@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22b458e4-ed5c-4cde-ab10-ac49eca6934b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/global_models/login_response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/db_model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/db_model/user_model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initialize/database_migration.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/database_migration.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initialize/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initialize/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth_routes/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth_routes/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth_routes/register.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth_routes/register.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/user_routes/get_current_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user_routes/get_current_user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +67,10 @@
       <package value="github.com/shine-bright-team/LAAS/v2/runner" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/runner/migration.go" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile" />
       <method v="2" />
     </configuration>
     <recent_temporary>
