@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22b458e4-ed5c-4cde-ab10-ac49eca6934b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/initialize/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/default_page.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/default_page.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
