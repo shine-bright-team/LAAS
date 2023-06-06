@@ -13,5 +13,6 @@ func Router(app *fiber.App) {
 	routesgroup.AuthRouter(auth_group)
 	app.Use(middlewere.GetUserMiddleware)
 	routesgroup.UserRouter(user_group)
-
+	app.Use(middlewere.VerifyLender)
+	routesgroup.LenderRouter(lender_group)
 }
