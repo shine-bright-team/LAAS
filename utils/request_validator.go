@@ -3,12 +3,12 @@ package utils
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
 )
 
-func RequestValidator(c *fiber.Ctx, data interface{}) *globalmodels.ErrorResponse {
+func RequestValidator(c *fiber.Ctx, data interface{}) *string {
 	if err := c.BodyParser(data); err != nil {
-		return &globalmodels.ErrorResponse{Type: "Parser", Message: fmt.Sprintf("Unable to Parser Query : %v", err)}
+		paserQueryError := fmt.Sprintf("Unable to Parser Query : %v", err)
+		return &paserQueryError
 	}
 	if err := StructValidator(data); err != nil {
 		return err
