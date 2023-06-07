@@ -8,5 +8,6 @@ type UserInfoResponse struct {
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
-	isLender  bool   `json:"is_lender"`
+	IsLender  bool   `json:"is_lender"`
+	Token     string `json:"token"`
 }
