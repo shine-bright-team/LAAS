@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22b458e4-ed5c-4cde-ab10-ac49eca6934b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/routes/default_page.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/default_page.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/initialize/routes_group/lender_router.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/routes_group/lender_router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/lender_routes/get_borrower_by_borrow_id.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +53,14 @@
   }
 }</component>
   <component name="RunManager" selected="Go Build.go build github.com/shine-bright-team/LAAS/v2">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="LAAS" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build github.com/shine-bright-team/LAAS/v2" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="LAAS" />
       <working_directory value="$PROJECT_DIR$" />
@@ -67,6 +77,15 @@
       <package value="github.com/shine-bright-team/LAAS/v2/runner" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/runner/migration.go" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="LAAS" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">

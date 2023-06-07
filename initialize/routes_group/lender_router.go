@@ -6,6 +6,15 @@ import (
 )
 
 func LenderRouter(router fiber.Router) {
-	router.Get("/borrowers/requests", lender_routes.GetBorrowerRequest)
-	router.Get("/borrowers", lender_routes.GetBorrowersDebt)
+	router.Post("/", lender_routes.CreateLenderPreference)
+
+	router.Get("/borrower/request", lender_routes.GetBorrowerRequest)
+	router.Get("/borrower", lender_routes.GetBorrowersDebt)
+
+	router.Post("/borrower/request", lender_routes.DecideBorrowRequest)
+	router.Get("/borrower/request/:borrowId", lender_routes.GetBorrowRequestByBorrowId)
+
+	router.Get("/debt", lender_routes.GetDebt)
+	router.Get("/debt/:debtId", lender_routes.GetDebtById)
+	router.Post("/debt/transaction", lender_routes.DecideTransaction)
 }
