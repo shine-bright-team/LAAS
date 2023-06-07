@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="22b458e4-ed5c-4cde-ab10-ac49eca6934b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/global_models/error_response.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/initialize/middlewere/get_user_middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/middlewere/get_user_middleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initialize/middlewere/verify_lender.go" beforeDir="false" afterPath="$PROJECT_DIR$/initialize/middlewere/verify_lender.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth_routes/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth_routes/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth_routes/register.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth_routes/register.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/lender_routes/get_debt_by_id.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/lender_routes/get_debt_by_id.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/user_routes/get_current_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user_routes/get_current_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/request_validator.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/request_validator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/struct_validator.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/struct_validator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/db_model/kyc_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/db_model/kyc_model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/user_routes/upload_kyc.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user_routes/upload_kyc.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
