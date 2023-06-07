@@ -14,5 +14,5 @@ type Kyc struct {
 	Birthdate  *time.Time `gorm:"not null"`
 	Address    string     `gorm:"not null"`
 	IdCard     string     `gorm:"not null"`
-	IsApproved bool       `gorm:"default:true"`
+	IsApproved bool       `gorm:"default:false"`
 }

@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/shine-bright-team/LAAS/v2/initialize"
 	"github.com/shine-bright-team/LAAS/v2/routes"
 )
@@ -15,6 +16,8 @@ func main() {
 	if err := initialize.DbSetUp(); err != nil {
 		log.Fatalf("There is an error setting up Database: %s", err)
 	}
+
+	app.Use(cors.New())
 
 	app.Get("/", routes.DefaultPage)
 

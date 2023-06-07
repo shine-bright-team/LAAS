@@ -9,8 +9,10 @@ import (
 func Router(app *fiber.App) {
 	user_group := app.Group("/user")
 	auth_group := app.Group("/auth")
+	lender_group := app.Group("/lender")
 	routesgroup.AuthRouter(auth_group)
 	app.Use(middlewere.GetUserMiddleware)
 	routesgroup.UserRouter(user_group)
-
+	app.Use(middlewere.VerifyLender)
+	routesgroup.LenderRouter(lender_group)
 }
