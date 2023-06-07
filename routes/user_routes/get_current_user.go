@@ -15,13 +15,13 @@ func GetCurrentUser(c *fiber.Ctx) error {
 	//isLender := c.Locals("isLender").(bool)
 	var user dbmodel.User
 	if userResult := db.DB.First(&user, userId); userResult.Error != nil {
-		return c.Status(fiber.StatusNotFound).JSON(globalmodels.ErrorResponse{Type: "Unauthorized", Message: "User not found"})
+		return c.Status(fiber.StatusNotFound).SendString("User not found.")
 	}
 	var kyc dbmodel.Kyc
 	dbResult := db.DB.Where("user_id = ?", userId).Last(&kyc)
 
 	if token, err := utils.SignToken(fmt.Sprint(user.ID), user.IsLender); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(globalmodels.ErrorResponse{Type: "Internal server error", Message: "We're having an issue on server, please try again later"})
+		return c.Status(fiber.StatusInternalServerError).SendString("We're having an issue on server, please try again later")
 	} else {
 		return c.JSON(globalmodels.UserInfoResponse{
 			Username:  user.Username,
