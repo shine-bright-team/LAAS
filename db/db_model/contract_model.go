@@ -18,4 +18,5 @@ type Contract struct {
 	IsApproved     bool          `gorm:"default:false"`
 	ContractFile   string        `gorm:"not null"`
 	Transactions   []Transaction `gorm:"foreignKey:ContractId"`
+	Borrower       User          `gorm:"foreignKey:BorrowerUserId"`
 }

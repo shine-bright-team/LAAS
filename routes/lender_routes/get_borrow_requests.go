@@ -2,14 +2,35 @@ package lender_routes
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/shine-bright-team/LAAS/v2/db"
+	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
-	"time"
 )
 
 func GetBorrowerRequest(c *fiber.Ctx) error {
-	user1 := globalmodels.BorrowRequestResponse{BorrowId: 1, UserId: 1, Firstname: "Sittichok", Lastname: "Ouamsiri", RequestedAt: time.Now(), RequestedAmount: 50, Username: "Thistine", RemainingAmount: nil, DueDate: nil}
-	user2 := globalmodels.BorrowRequestResponse{BorrowId: 2, UserId: 3, Firstname: "Sittichok1", Lastname: "Ouamsiri", RequestedAt: time.Now(), RequestedAmount: 300, Username: "Thistine1", RemainingAmount: nil, DueDate: nil}
-	user3 := globalmodels.BorrowRequestResponse{BorrowId: 2, UserId: 3, Firstname: "Sittichok2", Lastname: "Ouamsiri", RequestedAt: time.Now(), RequestedAmount: 3000, Username: "Thistine2", RemainingAmount: nil, DueDate: nil}
+	userId := c.Locals("userId").(int)
 
-	return c.JSON([3]globalmodels.BorrowRequestResponse{user1, user2, user3})
+	var contracts []dbmodel.Contract
+
+	if result := db.DB.Joins("User", db.DB.Where("lender_user_id = ? AND is_approved = false", uint(userId))).Find(&contracts); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
+	}
+
+	var borrowRequestResponses []globalmodels.BorrowRequestResponse
+
+	for i := range contracts {
+		borrowRequestResponses[i] = globalmodels.BorrowRequestResponse{
+			BorrowId:        contracts[i].ID,
+			Username:        contracts[i].Borrower.Username,
+			UserId:          contracts[i].Borrower.ID,
+			Firstname:       contracts[i].Borrower.Firstname,
+			Lastname:        contracts[i].Borrower.Lastname,
+			RequestedAmount: contracts[i].LoanAmount,
+			RemainingAmount: nil,
+			RequestedAt:     contracts[i].CreatedAt,
+			DueDate:         nil,
+		}
+	}
+
+	return c.JSON(borrowRequestResponses)
 }
