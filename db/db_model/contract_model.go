@@ -12,7 +12,7 @@ type Contract struct {
 	ID             uint      `gorm:"primary_key;autoIncrement:true"`
 	LenderUserId   uint      `gorm:"not null"`
 	BorrowerUserId uint      `gorm:"not null"`
-	LoanAmount     int64     `gorm:"not null"`
+	LoanAmount     float64   `gorm:"not null"`
 	SignedAt       time.Time `gorm:"not null"`
 	DueAt          time.Time
 	IsApproved     bool          `gorm:"default:false"`
