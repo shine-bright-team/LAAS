@@ -19,4 +19,5 @@ type Contract struct {
 	ContractFile   string        `gorm:"not null"`
 	Transactions   []Transaction `gorm:"foreignKey:ContractId"`
 	Borrower       User          `gorm:"foreignKey:BorrowerUserId"`
+	Lender         User          `gorm:"foreignKey:LenderUserId"`
 }
