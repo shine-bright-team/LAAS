@@ -7,26 +7,19 @@ import (
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"gorm.io/gorm"
-	"time"
 )
 
-type paymentChannel struct {
-	Channel string `json:"channel" validate:"required"`
-	Number  string `json:"number" validate:"required"`
-}
-
 type createLenderRequest struct {
-	StartAmount         float64          `json:"start_amount" validate:"required"`
-	EndAmount           float64          `json:"end_amount" validate:"required"`
-	InterestRate        float64          `json:"interest" validate:"required"`
-	DueWithIn           time.Time        `json:"due_with_in" validate:"required"`
-	ActiveAtLeast       int              `json:"active_at_least"`
-	BaseSalary          int              `json:"base_salary"`
-	AdditionalAgreement string           `json:"additional_agreement"`
-	PaymentChannel      []paymentChannel `json:"payment_channel" validate:"required"`
+	StartAmount         float32 `json:"start_amount" validate:"required"`
+	EndAmount           float32 `json:"end_amount" validate:"required"`
+	InterestRate        float32 `json:"interest" validate:"required"`
+	DueWithIn           int32   `json:"due_with_in" validate:"required"`
+	ActiveAtLeast       int     `json:"active_at_least"`
+	BaseSalary          int     `json:"base_salary"`
+	AdditionalAgreement string  `json:"additional_agreement"`
+	PaymentChannel      string  `json:"payment_channel" validate:"required"`
+	PaymentNumber       string  `json:"payment_number" validate:"required"`
 }
-
-// Todo: Connect payment channel to lender preference
 
 func CreateLenderPreference(c *fiber.Ctx) error {
 	userId := c.Locals("userId").(int)
@@ -35,20 +28,19 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 		return c.Status(fiber.ErrBadRequest.Code).SendString(*err)
 	}
 
-	var paymentChannels []dbmodel.PayChannel
-
-	for _, channel := range data.PaymentChannel {
-		paymentChannels = append(paymentChannels, dbmodel.PayChannel{
-			UserId:  uint(userId),
-			Channel: channel.Channel,
-			Number:  channel.Number,
-		})
+	borrowRequest := dbmodel.Agreement{
+		InterestRate: data.InterestRate,
+		DueIn:        data.DueWithIn,
+		Addition:     data.AdditionalAgreement,
 	}
 
-	if result := db.DB.Create(data); result.Error != nil {
+	if result := db.DB.Create(borrowRequest); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return c.Status(fiber.StatusBadRequest).SendString("The preference for this user already exist already exist.")
 		}
+		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
+	}
+	if result := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).Update("pay_channel", data.PaymentChannel).Update("pay_number", data.PaymentNumber); result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
 	}
 
