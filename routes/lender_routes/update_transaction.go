@@ -12,9 +12,9 @@ import (
 // /lender/debt/transaction
 
 type decideTransactionRequest struct {
-	TransactionId string `json:"transaction_id"`
-	IsApproved    bool   `json:"is_approved"`
-	ErrorMessage  string `json:"error_message"`
+	TransactionId string  `json:"transaction_id" validate:"required"`
+	IsApproved    bool    `json:"is_approved" validate:"required"`
+	ErrorMessage  *string `json:"error_message"`
 }
 
 func UpdateTransaction(c *fiber.Ctx) error {
@@ -24,6 +24,11 @@ func UpdateTransaction(c *fiber.Ctx) error {
 	if err := utils.RequestValidator(c, data); err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).SendString(*err)
 	}
+
+	if !data.IsApproved && data.ErrorMessage == nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Error message is required if transaction is not approved")
+	}
+
 	var transaction dbmodel.Transaction
 
 	if result := db.DB.Model(&transaction).Preload("Contract").First(&transaction, data.TransactionId); result.Error != nil {
@@ -35,14 +40,15 @@ func UpdateTransaction(c *fiber.Ctx) error {
 	if transaction.Contract.LenderUserId != uint(userId) {
 		return c.Status(fiber.StatusUnauthorized).SendString("You are not authorized to do this action")
 	}
-	// Todo: add check for error message
-	if transaction.IsApproved {
+	if transaction.IsApproved || transaction.ErrMessage != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Transaction is already approved and could not be changed")
 	}
 
-	// Todo: Add error message if any
-	db.DB.Model(&dbmodel.Transaction{}).Where("id = ?", data.TransactionId).Update("is_approved", data.IsApproved)
+	if data.IsApproved {
+		db.DB.Model(&dbmodel.Transaction{}).Where("id = ?", data.TransactionId).Update("is_approved", data.IsApproved)
+	} else {
+		db.DB.Model(&dbmodel.Transaction{}).Where("id = ?", data.TransactionId).Update("is_approved", data.IsApproved).Update("error_message", data.ErrorMessage)
+	}
 
 	return c.SendString("Transaction is updated successfully")
-	//return c.SendString("Decide Transaction by Transaction Id")
 }
