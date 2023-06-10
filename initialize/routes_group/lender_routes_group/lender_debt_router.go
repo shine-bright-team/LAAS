@@ -7,7 +7,6 @@ import (
 
 // /lender/debt
 func LenderDebtGroup(router fiber.Router) {
-	router.Get("/", lender_routes.GetDebt)
 	router.Get("/:debtId", lender_routes.GetDebtById)
-	router.Post("/transaction", lender_routes.DecideTransaction)
+	router.Post("/transaction", lender_routes.UpdateTransaction)
 }

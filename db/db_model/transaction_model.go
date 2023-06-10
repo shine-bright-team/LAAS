@@ -13,4 +13,5 @@ type Transaction struct {
 	PaidAmount float64   `gorm:"not null"`
 	PaidAt     time.Time `gorm:"not null"`
 	IsApproved bool      `gorm:"default:false"`
+	Contract   Contract  `gorm:"foreignKey:ContractId"`
 }

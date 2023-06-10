@@ -18,7 +18,7 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 
 	var contracts []contractWithRemaining
 
-	if result := db.DB.Raw("SELECT *, loan_amount - (select sum(transactions.paid_amount) from transactions where contract_id = contracts.id) as remaining_amount from contracts join users u on u.id = contracts.borrower_user_id where lender_user_id = ?;", userId).Scan(&contracts); result.Error != nil {
+	if result := db.DB.Raw("SELECT *, loan_amount - (select COALESCE(sum(transactions.paid_amount),0) from transactions where contract_id = contracts.id) as remaining_amount from contracts join users u on u.id = contracts.borrower_user_id where lender_user_id = ?;", userId).Scan(&contracts); result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 
@@ -39,12 +39,5 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(responses)
-
-	//a1 := 50.0
-	//timeN := time.Now().AddDate(0, 3, 0)
-	//user1 := globalmodels.BorrowRequestResponse{BorrowId: 5, UserId: 5, Firstname: "Muay", Lastname: "Mi", RequestedAt: time.Now(), RequestedAmount: 50, Username: "Mmuay", RemainingAmount: &a1, DueDate: &timeN}
-	//user2 := globalmodels.BorrowRequestResponse{BorrowId: 6, UserId: 6, Firstname: "Fa", Lastname: "H", RequestedAt: time.Now(), RequestedAmount: 300, Username: "Fxh", RemainingAmount: &a1, DueDate: &timeN}
-	//user3 := globalmodels.BorrowRequestResponse{BorrowId: 7, UserId: 7, Firstname: "Gu", Lastname: "Gun", RequestedAt: time.Now(), RequestedAmount: 3000, Username: "GuGun", RemainingAmount: &a1, DueDate: &timeN}
-	//return c.JSON([3]globalmodels.BorrowRequestResponse{user1, user2, user3})
 
 }
