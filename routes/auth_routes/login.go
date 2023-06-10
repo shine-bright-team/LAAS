@@ -19,7 +19,7 @@ func Login(c *fiber.Ctx) error {
 	data := &loginRequest{}
 
 	if err := utils.RequestValidator(c, data); err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(err)
+		return c.Status(fiber.ErrBadRequest.Code).SendString(*err)
 	}
 	var user dbmodel.User
 	emailRegex := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -39,17 +39,11 @@ func Login(c *fiber.Ctx) error {
 	if utils.CheckPasswordHash(data.Password, user.Password) {
 		token, err := utils.SignToken(fmt.Sprint(user.ID), user.IsLender)
 		if err != nil {
-			return c.Status(fiber.ErrInternalServerError.Code).JSON(globalmodels.ErrorResponse{
-				Type:    "Internal server error",
-				Message: "Error signing your token, please try logging in later.",
-			})
+			return c.Status(fiber.ErrInternalServerError.Code).SendString("Error signing your token, please try logging in later.")
 		}
 		return c.JSON(globalmodels.LoginResponse{Token: token})
 	} else {
-		return c.Status(fiber.StatusBadRequest).JSON(globalmodels.ErrorResponse{
-			Type:    "Incorrect username or password",
-			Message: "Incorrect username (or email) or password",
-		})
+		return c.Status(fiber.StatusBadRequest).SendString("Incorrect username (or email) or password")
 	}
 
 }

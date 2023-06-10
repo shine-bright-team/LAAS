@@ -2,14 +2,13 @@ package middlewere
 
 import (
 	"github.com/gofiber/fiber/v2"
-	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"strconv"
 	"strings"
 )
 
 func GetUserMiddleware(c *fiber.Ctx) error {
-	errorResponse := c.Status(fiber.StatusUnauthorized).JSON(globalmodels.ErrorResponse{Type: "Unauthorized", Message: "Unauthorized, make sure you logged in"})
+	errorResponse := c.Status(fiber.StatusUnauthorized).SendString("Unauthorized, make sure you logged in")
 	authorizationHeader := c.Get("Authorization")
 
 	splittedHeader := strings.Split(authorizationHeader, " ")
