@@ -11,6 +11,9 @@ import (
 type contractWithRemaining struct {
 	dbmodel.Contract
 	RemainingAmount int
+	Username        string
+	Firstname       string
+	Lastname        string
 }
 
 func GetBorrowersDebt(c *fiber.Ctx) error {
@@ -29,10 +32,10 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 	for i := range contracts {
 		responses = append(responses, globalmodels.BorrowRequestResponse{
 			BorrowId:        contracts[i].ID,
-			Username:        contracts[i].Borrower.Username,
-			UserId:          contracts[i].Borrower.ID,
-			Firstname:       contracts[i].Borrower.Firstname,
-			Lastname:        contracts[i].Borrower.Lastname,
+			Username:        contracts[i].Username,
+			UserId:          contracts[i].BorrowerUserId,
+			Firstname:       contracts[i].Firstname,
+			Lastname:        contracts[i].Lastname,
 			RequestedAmount: contracts[i].LoanAmount,
 			RemainingAmount: &contracts[i].RemainingAmount,
 			RequestedAt:     contracts[i].CreatedAt,
