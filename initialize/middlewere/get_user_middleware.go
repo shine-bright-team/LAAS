@@ -16,8 +16,8 @@ func GetUserMiddleware(c *fiber.Ctx) error {
 		return errorResponse
 	}
 	token := splittedHeader[1]
-	if claims, error := utils.ValidateToken(token); error != nil {
-		print(error.Error())
+	if claims, err := utils.ValidateToken(token); err != nil {
+		print(err.Error())
 		return errorResponse
 	} else {
 		if s, err := strconv.Atoi(claims.UserId); err != nil {
@@ -26,6 +26,7 @@ func GetUserMiddleware(c *fiber.Ctx) error {
 			c.Locals("userId", s)
 			c.Locals("isLender", claims.IsLender)
 		}
+		c.Status(fiber.StatusOK)
 		return c.Next()
 	}
 
