@@ -5,6 +5,7 @@ import (
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
+	"log"
 )
 
 type contractWithRemaining struct {
@@ -22,10 +23,11 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 
-	var responses []globalmodels.BorrowRequestResponse
+	log.Printf("%+v", contracts)
 
+	var responses []globalmodels.BorrowRequestResponse
 	for i := range contracts {
-		responses[i] = globalmodels.BorrowRequestResponse{
+		responses = append(responses, globalmodels.BorrowRequestResponse{
 			BorrowId:        contracts[i].ID,
 			Username:        contracts[i].Borrower.Username,
 			UserId:          contracts[i].Borrower.ID,
@@ -35,7 +37,7 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 			RemainingAmount: &contracts[i].RemainingAmount,
 			RequestedAt:     contracts[i].CreatedAt,
 			DueDate:         &contracts[i].DueAt,
-		}
+		})
 	}
 
 	return c.JSON(responses)
