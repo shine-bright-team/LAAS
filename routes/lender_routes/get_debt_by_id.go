@@ -43,10 +43,10 @@ func GetDebtById(c *fiber.Ctx) error {
 	response := getDebtByIdResponse{
 		debtDetail: globalmodels.BorrowRequestResponse{
 			BorrowId:        contract.ID,
-			Username:        contract.Borrower.Username,
-			UserId:          contract.Borrower.ID,
-			Firstname:       contract.Borrower.Firstname,
-			Lastname:        contract.Borrower.Lastname,
+			UserId:          contract.BorrowerUserId,
+			Username:        contract.Username,
+			Firstname:       contract.Firstname,
+			Lastname:        contract.Lastname,
 			RequestedAmount: contract.LoanAmount,
 			RemainingAmount: &contract.RemainingAmount,
 			RequestedAt:     contract.CreatedAt,
