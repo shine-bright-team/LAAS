@@ -28,7 +28,7 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 
 	log.Printf("%+v", contracts)
 
-	var responses []globalmodels.BorrowRequestResponse
+	responses := make([]globalmodels.BorrowRequestResponse, 0)
 	for i := range contracts {
 		responses = append(responses, globalmodels.BorrowRequestResponse{
 			BorrowId:        contracts[i].ID,
