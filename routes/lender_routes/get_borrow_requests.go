@@ -5,6 +5,7 @@ import (
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
+	"log"
 )
 
 func GetBorrowerRequest(c *fiber.Ctx) error {
@@ -12,14 +13,15 @@ func GetBorrowerRequest(c *fiber.Ctx) error {
 
 	var contracts []dbmodel.Contract
 
-	if result := db.DB.Joins("User", db.DB.Where("lender_user_id = ? AND is_approved = false", uint(userId))).Find(&contracts); result.Error != nil {
+	if result := db.DB.Model(&dbmodel.Contract{}).Preload("Borrower").Where("lender_user_id = ? AND is_approved = false", uint(userId)); result.Error != nil {
+		log.Print(result.Error)
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 
-	var borrowRequestResponses []globalmodels.BorrowRequestResponse
+	borrowRequestResponses := make([]globalmodels.BorrowRequestResponse, 0)
 
 	for i := range contracts {
-		borrowRequestResponses[i] = globalmodels.BorrowRequestResponse{
+		borrowRequestResponses = append(borrowRequestResponses, globalmodels.BorrowRequestResponse{
 			BorrowId:        contracts[i].ID,
 			Username:        contracts[i].Borrower.Username,
 			UserId:          contracts[i].Borrower.ID,
@@ -29,7 +31,7 @@ func GetBorrowerRequest(c *fiber.Ctx) error {
 			RemainingAmount: nil,
 			RequestedAt:     contracts[i].CreatedAt,
 			DueDate:         nil,
-		}
+		})
 	}
 
 	return c.JSON(borrowRequestResponses)
