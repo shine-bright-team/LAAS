@@ -33,6 +33,7 @@ type User struct {
 	IsLender   bool           `gorm:"not null"`
 	Kycs       []Kyc          `gorm:"foreignKey:UserId"`
 	Subs       []Subscription `gorm:"foreignKey:UserId"`
+	Agreements []Agreement    `gorm:"foreignKey:UserId"`
 	Lenders    []Contract     `gorm:"foreignKey:LenderUserId"`
 	Borrowers  []Contract     `gorm:"foreignKey:BorrowerUserId"`
 	PayChannel string         `gorm:"default:''"`

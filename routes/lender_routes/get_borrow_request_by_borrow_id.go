@@ -7,16 +7,22 @@ import (
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 func GetBorrowRequestByBorrowId(c *fiber.Ctx) error {
 
-	borrowerId := c.Params("borrowId")
+	borrowerIdStr := c.Params("borrowId")
 	userId := c.Locals("userId").(int)
+
+	borrowerId, err := strconv.Atoi(borrowerIdStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid borrow id")
+	}
 
 	var contract dbmodel.Contract
 
-	if result := db.DB.Model(&contract).Preload("User").First(&contract, borrowerId); result.Error != nil {
+	if result := db.DB.Model(&contract).Preload("Borrower").First(&contract, borrowerId); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).SendString("Contract not found")
 		}
@@ -27,7 +33,7 @@ func GetBorrowRequestByBorrowId(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).SendString("You are not authorized to do this action")
 	}
 
-	if !contract.IsApproved {
+	if contract.IsApproved {
 		return c.Status(fiber.StatusBadRequest).SendString("Contract is already approved")
 	}
 
