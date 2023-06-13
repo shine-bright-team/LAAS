@@ -12,8 +12,8 @@ import (
 // /lender/debt/transaction
 
 type decideTransactionRequest struct {
-	TransactionId string  `json:"transaction_id" validate:"required"`
-	IsApproved    bool    `json:"is_approved" validate:"required"`
+	TransactionId int     `json:"transaction_id" validate:"required"`
+	IsApproved    *bool   `json:"is_approved" validate:"required"`
 	ErrorMessage  *string `json:"error_message"`
 }
 
@@ -25,7 +25,7 @@ func UpdateTransaction(c *fiber.Ctx) error {
 		return c.Status(fiber.ErrBadRequest.Code).SendString(*err)
 	}
 
-	if !data.IsApproved && data.ErrorMessage == nil {
+	if !*(data.IsApproved) && data.ErrorMessage == nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Error message is required if transaction is not approved")
 	}
 
@@ -43,12 +43,12 @@ func UpdateTransaction(c *fiber.Ctx) error {
 	if transaction.IsApproved || transaction.ErrMessage != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Transaction is already approved and could not be changed")
 	}
-
-	if data.IsApproved {
-		db.DB.Model(&dbmodel.Transaction{}).Where("id = ?", data.TransactionId).Update("is_approved", data.IsApproved)
-	} else {
-		db.DB.Model(&dbmodel.Transaction{}).Where("id = ?", data.TransactionId).Update("is_approved", data.IsApproved).Update("error_message", data.ErrorMessage)
+	transaction.IsApproved = *data.IsApproved
+	if !(*data.IsApproved) {
+		transaction.ErrMessage = data.ErrorMessage
 	}
+
+	db.DB.Save(&transaction)
 
 	return c.SendString("Transaction is updated successfully")
 }
