@@ -10,15 +10,15 @@ import (
 )
 
 type createLenderRequest struct {
-	StartAmount         float32 `json:"start_amount" validate:"required"`
-	EndAmount           float32 `json:"end_amount" validate:"required"`
-	InterestRate        float32 `json:"interest" validate:"required"`
-	DueWithIn           int32   `json:"due_with_in" validate:"required"`
-	ActiveAtLeast       int     `json:"active_at_least"`
-	BaseSalary          int     `json:"base_salary"`
-	AdditionalAgreement string  `json:"additional_agreement"`
-	PaymentChannel      string  `json:"payment_channel" validate:"required"`
-	PaymentNumber       string  `json:"payment_number" validate:"required"`
+	StartAmount         *float32 `json:"start_amount" validate:"required"`
+	EndAmount           float32  `json:"end_amount" validate:"required"`
+	InterestRate        float32  `json:"interest" validate:"required"`
+	DueWithIn           int32    `json:"due_with_in" validate:"required"`
+	ActiveAtLeast       int      `json:"active_at_least"`
+	BaseSalary          int      `json:"base_salary"`
+	AdditionalAgreement string   `json:"additional_agreement"`
+	PaymentChannel      string   `json:"payment_channel" validate:"required"`
+	PaymentNumber       string   `json:"payment_number" validate:"required"`
 }
 
 func CreateLenderPreference(c *fiber.Ctx) error {
@@ -29,12 +29,13 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 	}
 
 	borrowRequest := dbmodel.Agreement{
+		UserId:       uint(userId),
 		InterestRate: data.InterestRate,
 		DueIn:        data.DueWithIn,
 		Addition:     data.AdditionalAgreement,
 	}
 
-	if result := db.DB.Create(borrowRequest); result.Error != nil {
+	if result := db.DB.Create(&borrowRequest); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return c.Status(fiber.StatusBadRequest).SendString("The preference for this user already exist already exist.")
 		}
