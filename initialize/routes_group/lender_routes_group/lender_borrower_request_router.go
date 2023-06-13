@@ -8,6 +8,6 @@ import (
 // /lender/borrower/request
 func LenderBorrowerRequestRouter(router fiber.Router) {
 	router.Get("/", lender_routes.GetBorrowerRequest)
-	router.Post("/", lender_routes.UpdateBorrowRequest)
+	router.Patch("/", lender_routes.UpdateBorrowRequest)
 	router.Get("/:borrowId", lender_routes.GetBorrowRequestByBorrowId)
 }

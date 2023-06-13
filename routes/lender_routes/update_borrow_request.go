@@ -5,12 +5,15 @@ import (
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	"github.com/shine-bright-team/LAAS/v2/utils"
+	"time"
 )
 
 type updateBorrowRequest struct {
-	ContractId string `json:"contract_id" validate:"required"`
-	IsApproved bool   `json:"is_approved" validate:"required"`
+	ContractId int  `json:"contract_id" validate:"required"`
+	IsApproved bool `json:"is_approved" validate:"required"`
 }
+
+// lender/borrower/request
 
 func UpdateBorrowRequest(c *fiber.Ctx) error {
 	data := &updateBorrowRequest{}
@@ -20,7 +23,9 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 	}
 	var contract dbmodel.Contract
 
-	db.DB.Model(&contract).First(&contract, data.ContractId)
+	if result := db.DB.Model(&contract).Preload("Agreement").First(&contract, data.ContractId); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
+	}
 
 	if contract.IsApproved {
 		return c.Status(fiber.StatusBadRequest).SendString("Contract is already approved")
@@ -30,11 +35,18 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).SendString("You are not authorized to do this action")
 	}
 
+	if contract.Agreement.DueIn == 0 {
+		return c.Status(fiber.StatusBadRequest).SendString("Due in is not set")
+	}
+
 	if !data.IsApproved {
 		db.DB.Delete(&dbmodel.Contract{}, data.ContractId)
 		return c.SendString("Decline request")
 	} else {
-		db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
+		contract.IsApproved = data.IsApproved
+		contract.DueAt = time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
+		db.DB.Save(&contract)
+		//db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
 		return c.SendString("Approved request")
 	}
 }
