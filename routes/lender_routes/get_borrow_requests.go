@@ -13,7 +13,7 @@ func GetBorrowerRequest(c *fiber.Ctx) error {
 
 	var contracts []dbmodel.Contract
 
-	if result := db.DB.Model(&dbmodel.Contract{}).Preload("Borrower").Where("lender_user_id = ? AND is_approved = false", uint(userId)); result.Error != nil {
+	if result := db.DB.Model(&dbmodel.Contract{}).Preload("Borrower").Where("lender_user_id = ? AND is_approved = false", userId).Find(&contracts); result.Error != nil {
 		log.Print(result.Error)
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
