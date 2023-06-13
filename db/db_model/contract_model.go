@@ -9,11 +9,11 @@ import (
 type Contract struct {
 	gorm.Model
 	AgreementId    uint
-	ID             uint      `gorm:"primary_key;autoIncrement:true"`
-	LenderUserId   uint      `gorm:"not null"`
-	BorrowerUserId uint      `gorm:"not null"`
-	LoanAmount     float64   `gorm:"not null"`
-	SignedAt       time.Time `gorm:"not null"`
+	ID             uint    `gorm:"primary_key;autoIncrement:true"`
+	LenderUserId   uint    `gorm:"not null"`
+	BorrowerUserId uint    `gorm:"not null"`
+	LoanAmount     float64 `gorm:"not null"`
+	SignedAt       time.Time
 	DueAt          time.Time
 	IsApproved     bool          `gorm:"default:false"`
 	ContractFile   string        `gorm:"not null"`
