@@ -6,6 +6,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// type TransactionStatus string
+
+// const (
+// 	WAITING TransactionStatus = "Waiting"
+// 	FAILED  TransactionStatus = "Failed"
+// 	SUCCESS TransactionStatus = "Success"
+// )
+
 type Transaction struct {
 	gorm.Model
 	ContractId uint
@@ -13,6 +21,7 @@ type Transaction struct {
 	PaidAmount float64   `gorm:"not null"`
 	PaidAt     time.Time `gorm:"not null"`
 	ErrMessage *string   `gorm:"default:null"`
-	IsApproved bool      `gorm:"default:false"`
-	Contract   Contract  `gorm:"foreignKey:ContractId"`
+	IsApproved bool      `gorm:"defaukt:false"`
+	// IsApproved TransactionStatus `sql:"type:ENUM('Waiting','Failed','Success')" gorm:"column:isApproved"`
+	Contract Contract `gorm:"foreignKey:ContractId"`
 }
