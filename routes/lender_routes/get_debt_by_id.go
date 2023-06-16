@@ -23,6 +23,7 @@ type debtTransaction struct {
 	PaidAt       time.Time `json:"paid_at"`
 	ErrorMessage *string   `json:"error_message"`
 	IsApproved   bool      `json:"is_approved"`
+	Status       string    `json:"status"`
 }
 
 func GetDebtById(c *fiber.Ctx) error {
@@ -57,12 +58,20 @@ func GetDebtById(c *fiber.Ctx) error {
 	transactionsResponse := make([]debtTransaction, 0)
 
 	for i := range transactions {
+		status := "PENDING"
+		if !transactions[i].IsApproved && transactions[i].ErrMessage != nil {
+			status = "ERROR"
+		}
+		if transactions[i].IsApproved {
+			status = "SUCCESS"
+		}
 		transactionsResponse = append(transactionsResponse, debtTransaction{
 			Id:           transactions[i].ID,
 			PaidAmount:   transactions[i].PaidAmount,
 			PaidAt:       transactions[i].PaidAt,
 			ErrorMessage: transactions[i].ErrMessage,
 			IsApproved:   transactions[i].IsApproved,
+			Status:       status,
 		})
 	}
 
