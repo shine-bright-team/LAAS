@@ -9,8 +9,8 @@ import (
 // type TransactionStatus string
 
 // const (
-// 	WAITING TransactionStatus = "Waiting"
-// 	FAILED  TransactionStatus = "Failed"
+// 	PENDING TransactionStatus = "Pending"
+// 	ERROR  TransactionStatus = "Error"
 // 	SUCCESS TransactionStatus = "Success"
 // )
 
@@ -22,6 +22,6 @@ type Transaction struct {
 	PaidAt     time.Time `gorm:"not null"`
 	ErrMessage *string   `gorm:"default:null"`
 	IsApproved bool      `gorm:"defaukt:false"`
-	// IsApproved TransactionStatus `sql:"type:ENUM('Waiting','Failed','Success')" gorm:"column:isApproved"`
+	// IsApproved TransactionStatus `sql:"type:ENUM('Pending','Error','Success')" gorm:"column:isApproved"`
 	Contract Contract `gorm:"foreignKey:ContractId"`
 }
