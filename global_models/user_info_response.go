@@ -1,7 +1,7 @@
 package globalmodels
 
 type UserInfoResponse struct {
-	Id        string `json:"id"`
+	Id        uint   `json:"id"`
 	IsKyc     bool   `json:"is_kyc"`
 	Username  string `json:"username"`
 	Title     string `json:"title"`
