@@ -12,7 +12,7 @@ func GetUserMiddleware(c *fiber.Ctx) error {
 	authorizationHeader := c.Get("Authorization")
 
 	splittedHeader := strings.Split(authorizationHeader, " ")
-	if len(splittedHeader) != 2 && splittedHeader[0] != "Bearer" {
+	if len(splittedHeader) != 2 || splittedHeader[0] != "Bearer" {
 		return errorResponse
 	}
 	token := splittedHeader[1]
