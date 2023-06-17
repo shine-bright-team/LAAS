@@ -28,7 +28,7 @@ func GetCurrentUser(c *fiber.Ctx) error {
 			Email:     user.Email,
 			Lastname:  user.Lastname,
 			Firstname: user.Firstname,
-			Id:        fmt.Sprint(user.ID),
+			Id:        user.ID,
 			Title:     string(user.Title),
 			IsKyc:     !(dbResult.Error != nil || !kyc.IsApproved),
 			IsLender:  user.IsLender,

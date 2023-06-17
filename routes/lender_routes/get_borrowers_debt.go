@@ -10,7 +10,7 @@ import (
 type contractWithRemaining struct {
 	dbmodel.Contract
 	Id              uint
-	RemainingAmount int
+	RemainingAmount float64
 	Username        string
 	Firstname       string
 	Lastname        string
