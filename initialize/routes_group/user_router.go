@@ -7,5 +7,6 @@ import (
 
 func UserRouter(router fiber.Router) {
 	router.Get("/", userroutes.GetCurrentUser)
+	router.Get("/agreement", userroutes.GetAgreemnt)
 	router.Post("/kyc", userroutes.UploadKyc)
 }
