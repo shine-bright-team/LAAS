@@ -38,4 +38,8 @@ type User struct {
 	Borrowers  []Contract     `gorm:"foreignKey:BorrowerUserId"`
 	PayChannel string         `gorm:"default:''"`
 	PayNumber  string         `gorm:"default:''"`
+	UserCredit int32          `gorm:"default:0"`
+	UserReview float32
+	Reviewers  []Review `gorm:"foreignKey:ReviewerUserId"`
+	Reviewed   []Review `gorm:"foreignKey:ReviewedUserId"`
 }
