@@ -16,9 +16,10 @@ type createLenderRequest struct {
 	DueWithIn           int32    `json:"due_with_in" validate:"required"`
 	ActiveAtLeast       int      `json:"active_at_least"`
 	BaseSalary          int      `json:"base_salary"`
-	AdditionalAgreement string   `json:"additional_agreement"`
+	AdditionalAgreement *string  `json:"additional_agreement"`
 	PaymentChannel      string   `json:"payment_channel" validate:"required"`
 	PaymentNumber       string   `json:"payment_number" validate:"required"`
+	IsInterestPerMonth  *bool    `json:"is_interest_per_month" validate:"required"`
 }
 
 func CreateLenderPreference(c *fiber.Ctx) error {
@@ -29,10 +30,11 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 	}
 
 	borrowRequest := dbmodel.Agreement{
-		UserId:       uint(userId),
-		InterestRate: data.InterestRate,
-		DueIn:        data.DueWithIn,
-		Addition:     data.AdditionalAgreement,
+		UserId:             uint(userId),
+		InterestRate:       &data.InterestRate,
+		DueIn:              data.DueWithIn,
+		Addition:           *data.AdditionalAgreement,
+		IsInterestPerMonth: *data.IsInterestPerMonth,
 	}
 
 	if result := db.DB.Create(&borrowRequest); result.Error != nil {
