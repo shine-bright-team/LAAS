@@ -33,6 +33,8 @@ func GetBorrowerRequest(c *fiber.Ctx) error {
 			DueDate:         nil,
 			PayChannel:      nil,
 			PayNumber:       nil,
+			DebtAnalysis:    nil,
+			Reviews:         nil,
 		})
 	}
 
