@@ -8,6 +8,7 @@ import (
 
 func LenderRouter(router fiber.Router) {
 	router.Post("/", lender_routes.CreateLenderPreference)
+	router.Patch("/", lender_routes.UpdateLenderPreference)
 	borrowerGroup := router.Group("/borrower")
 	debtGroup := router.Group("/debt")
 	lender_routes_group.LenderBorrowerRouter(borrowerGroup)
