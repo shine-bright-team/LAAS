@@ -47,5 +47,7 @@ func GetBorrowRequestByBorrowId(c *fiber.Ctx) error {
 		RemainingAmount: nil,
 		RequestedAt:     contract.CreatedAt,
 		DueDate:         nil,
+		PayChannel:      &contract.Borrower.PayChannel,
+		PayNumber:       &contract.Borrower.PayNumber,
 	})
 }
