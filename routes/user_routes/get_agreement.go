@@ -20,7 +20,7 @@ func GetAgreemnt(c *fiber.Ctx) error {
 	var InterestRateFormat *string
 	InterestRateFormat = nil
 	if agreement.InterestRate != nil {
-		tempFormat := fmt.Sprintf("%.2f %", *agreement.InterestRate)
+		tempFormat := fmt.Sprintf("%.2f%%", *agreement.InterestRate)
 		if agreement.IsInterestPerMonth {
 			tempFormat = tempFormat + " per month"
 		} else {
