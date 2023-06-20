@@ -18,6 +18,7 @@ func GetAgreemnt(c *fiber.Ctx) error {
 	}
 
 	var InterestRateFormat *string
+	var FormatAmountrange *string
 	InterestRateFormat = nil
 	if agreement.InterestRate != nil {
 		tempFormat := fmt.Sprintf("%.2f%%", *agreement.InterestRate)
@@ -28,10 +29,16 @@ func GetAgreemnt(c *fiber.Ctx) error {
 		}
 		InterestRateFormat = &tempFormat
 	}
+	if agreement.InterestRate != nil {
+		amountrange := fmt.Sprintf("%.2f", agreement.LowestAmount)
+		amountrange += " - " + fmt.Sprintf("%.2f", agreement.HighestAmount)
+		FormatAmountrange = &amountrange
+	}
 
 	return c.JSON(globalmodels.AgreementResponse{
 		UserId:       agreement.UserId,
 		ID:           agreement.ID,
+		AmountRange:  FormatAmountrange,
 		InterestRate: InterestRateFormat,
 		DueIn:        agreement.DueIn,
 		Addition:     agreement.Addition,
