@@ -20,19 +20,26 @@ func GetCurrentUser(c *fiber.Ctx) error {
 	var kyc dbmodel.Kyc
 	dbResult := db.DB.Where("user_id = ?", userId).Last(&kyc)
 
+	var agreement *dbmodel.Agreement
+
+	agreement = nil
+
+	dbAgreement := db.DB.Model(&dbmodel.Agreement{}).Where("user_id = ?", userId).Last(&agreement)
+
 	if token, err := utils.SignToken(fmt.Sprint(user.ID), user.IsLender); err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("We're having an issue on server, please try again later")
 	} else {
 		return c.JSON(globalmodels.UserInfoResponse{
-			Username:  user.Username,
-			Email:     user.Email,
-			Lastname:  user.Lastname,
-			Firstname: user.Firstname,
-			Id:        user.ID,
-			Title:     string(user.Title),
-			IsKyc:     !(dbResult.Error != nil || !kyc.IsApproved),
-			IsLender:  user.IsLender,
-			Token:     token,
+			Username:       user.Username,
+			Email:          user.Email,
+			Lastname:       user.Lastname,
+			Firstname:      user.Firstname,
+			Id:             user.ID,
+			Title:          string(user.Title),
+			IsKyc:          !(dbResult.Error != nil || !kyc.IsApproved),
+			IsSetAgreement: !(dbAgreement.Error != nil || agreement.ID == 0),
+			IsLender:       user.IsLender,
+			Token:          token,
 		})
 	}
 
