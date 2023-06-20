@@ -31,10 +31,14 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 
 	borrowRequest := dbmodel.Agreement{
 		UserId:             uint(userId),
+		LowestAmount:       *data.StartAmount,
+		HighestAmount:      data.EndAmount,
 		InterestRate:       &data.InterestRate,
 		DueIn:              data.DueWithIn,
 		Addition:           *data.AdditionalAgreement,
+		Contracts:          nil,
 		IsInterestPerMonth: *data.IsInterestPerMonth,
+		Owner:              dbmodel.User{},
 	}
 
 	if result := db.DB.Create(&borrowRequest); result.Error != nil {
