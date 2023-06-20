@@ -8,6 +8,8 @@ type Agreement struct {
 	gorm.Model
 	UserId             uint
 	ID                 uint       `gorm:"primary_key;autoIncrement:true"`
+	LowestAmount       float32    `gorm:"default:0"`
+	HighestAmount      float32    `gorm:"default:0"`
 	InterestRate       *float32   `gorm:"default:null"`
 	DueIn              int32      `gorm:"not null"`
 	Addition           string     `gorm:"default:''"`
