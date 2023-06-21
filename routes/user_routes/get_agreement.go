@@ -1,11 +1,14 @@
 package userroutes
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
+	"github.com/shine-bright-team/LAAS/v2/routes/lender_routes"
+	"gorm.io/gorm"
 	"log"
 )
 
@@ -35,6 +38,19 @@ func GetAgreemnt(c *fiber.Ctx) error {
 		FormatAmountrange = &amountrange
 	}
 
+	var aggregatedReview lender_routes.BorrowReviewAggregate
+
+	if result := db.DB.Raw("select avg(score) as score, count(*) as review_count from reviews where reviewed_user_id = ?;", userId).Scan(&aggregatedReview); result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			aggregatedReview = lender_routes.BorrowReviewAggregate{
+				Score:       0,
+				ReviewCount: 0,
+			}
+		} else {
+			return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
+		}
+	}
+
 	return c.JSON(globalmodels.AgreementResponse{
 		UserId:       agreement.UserId,
 		ID:           agreement.ID,
@@ -42,6 +58,10 @@ func GetAgreemnt(c *fiber.Ctx) error {
 		InterestRate: InterestRateFormat,
 		DueIn:        agreement.DueIn,
 		Addition:     agreement.Addition,
+		Review: globalmodels.ReviewResponse{
+			ReviewAverage: aggregatedReview.Score,
+			ReviewCount:   aggregatedReview.ReviewCount,
+		},
 	})
 
 }

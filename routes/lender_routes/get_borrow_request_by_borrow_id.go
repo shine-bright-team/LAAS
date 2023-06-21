@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-type borrowReviewAggregate struct {
+type BorrowReviewAggregate struct {
 	Score       float64
 	ReviewCount int
 }
@@ -39,11 +39,11 @@ func GetBorrowRequestByBorrowId(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 
-	var aggregatedReview borrowReviewAggregate
+	var aggregatedReview BorrowReviewAggregate
 
 	if result := db.DB.Raw("select avg(score) as score, count(*) as review_count from reviews where reviewed_user_id = ?;", contract.BorrowerUserId).Scan(&aggregatedReview); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			aggregatedReview = borrowReviewAggregate{
+			aggregatedReview = BorrowReviewAggregate{
 				Score:       0,
 				ReviewCount: 0,
 			}
