@@ -9,8 +9,8 @@ import (
 )
 
 type updateBorrowRequest struct {
-	ContractId int  `json:"contract_id" validate:"required"`
-	IsApproved bool `json:"is_approved" validate:"required"`
+	ContractId int   `json:"contract_id" validate:"required"`
+	IsApproved *bool `json:"is_approved" validate:"required"`
 }
 
 // lender/borrower/request
@@ -39,11 +39,11 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Due in is not set")
 	}
 
-	if !data.IsApproved {
+	if !*data.IsApproved {
 		db.DB.Delete(&dbmodel.Contract{}, data.ContractId)
 		return c.SendString("Decline request")
 	} else {
-		contract.IsApproved = data.IsApproved
+		contract.IsApproved = *data.IsApproved
 		contract.DueAt = time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
 		db.DB.Save(&contract)
 		//db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
