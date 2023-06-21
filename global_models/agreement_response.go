@@ -7,4 +7,5 @@ type AgreementResponse struct {
 	InterestRate *string
 	DueIn        int32
 	Addition     string
+	Review       ReviewResponse `json:"review"`
 }
