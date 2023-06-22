@@ -19,6 +19,11 @@ func GetAgreemnt(c *fiber.Ctx) error {
 		log.Print(res.Error)
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
+	var user dbmodel.User
+	if res := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).First(user); res.Error != nil {
+		log.Print(res.Error)
+		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
+	}
 
 	var InterestRateFormat *string
 	var FormatAmountrange *string
@@ -62,6 +67,10 @@ func GetAgreemnt(c *fiber.Ctx) error {
 			ReviewAverage: aggregatedReview.Score,
 			ReviewCount:   aggregatedReview.ReviewCount,
 		},
+		ActiveAtLeast:  nil,
+		HaveBaseSalary: nil,
+		PaymentChannel: user.PayChannel,
+		PaymentNumber:  user.PayNumber,
 	})
 
 }
