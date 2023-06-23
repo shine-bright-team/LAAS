@@ -14,8 +14,8 @@ type createLenderRequest struct {
 	EndAmount           float32  `json:"end_amount" validate:"required"`
 	InterestRate        *float32 `json:"interest"`
 	DueWithIn           int32    `json:"due_with_in" validate:"required"`
-	ActiveAtLeast       int      `json:"active_at_least"`
-	BaseSalary          int      `json:"base_salary"`
+	ActiveAtLeast       *int16   `json:"active_at_least"`
+	BaseSalary          *int32   `json:"base_salary"`
 	AdditionalAgreement *string  `json:"additional_agreement"`
 	PaymentChannel      string   `json:"payment_channel" validate:"required"`
 	PaymentNumber       string   `json:"payment_number" validate:"required"`
@@ -35,6 +35,8 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 		HighestAmount:      data.EndAmount,
 		InterestRate:       data.InterestRate,
 		DueIn:              data.DueWithIn,
+		ActiveAtLeast:      data.ActiveAtLeast,
+		BaseSalary:         data.BaseSalary,
 		Addition:           *data.AdditionalAgreement,
 		Contracts:          nil,
 		IsInterestPerMonth: *data.IsInterestPerMonth,
