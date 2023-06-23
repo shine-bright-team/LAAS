@@ -67,8 +67,8 @@ func GetAgreemnt(c *fiber.Ctx) error {
 			ReviewAverage: aggregatedReview.Score,
 			ReviewCount:   aggregatedReview.ReviewCount,
 		},
-		ActiveAtLeast:  nil,
-		HaveBaseSalary: nil,
+		ActiveAtLeast:  agreement.ActiveAtLeast,
+		HaveBaseSalary: agreement.BaseSalary,
 		PaymentChannel: user.PayChannel,
 		PaymentNumber:  user.PayNumber,
 	})

@@ -8,8 +8,8 @@ type AgreementResponse struct {
 	DueIn          int32
 	Addition       string
 	Review         ReviewResponse `json:"review"`
-	ActiveAtLeast  *string        `json:"active_at_least"`
-	HaveBaseSalary *string        `json:"have_base_salary"`
+	ActiveAtLeast  *int16         `json:"active_at_least"`
+	HaveBaseSalary *int32         `json:"have_base_salary"`
 	PaymentChannel string         `json:"payment_channel"`
 	PaymentNumber  string         `json:"payment_number"`
 }

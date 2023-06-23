@@ -29,6 +29,10 @@ func UpdateLenderPreference(c *fiber.Ctx) error {
 	agreement.DueIn = data.DueWithIn
 	agreement.Addition = *data.AdditionalAgreement
 	agreement.IsInterestPerMonth = *data.IsInterestPerMonth
+	agreement.LowestAmount = *data.StartAmount
+	agreement.HighestAmount = data.EndAmount
+	agreement.ActiveAtLeast = data.ActiveAtLeast
+	agreement.BaseSalary = data.BaseSalary
 
 	if result := db.DB.Save(agreement); result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
