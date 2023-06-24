@@ -37,7 +37,7 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 			RequestedAmount: contracts[i].LoanAmount,
 			RemainingAmount: &contracts[i].RemainingAmount,
 			RequestedAt:     contracts[i].CreatedAt,
-			DueDate:         &contracts[i].DueAt,
+			DueDate:         contracts[i].DueAt,
 			PayChannel:      nil,
 			PayNumber:       nil,
 			DebtAnalysis:    nil,

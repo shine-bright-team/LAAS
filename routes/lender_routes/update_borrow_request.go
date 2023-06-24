@@ -43,8 +43,9 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		db.DB.Delete(&dbmodel.Contract{}, data.ContractId)
 		return c.SendString("Decline request")
 	} else {
+		DueAtTime := time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
 		contract.IsApproved = *data.IsApproved
-		contract.DueAt = time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
+		contract.DueAt = &DueAtTime
 		db.DB.Save(&contract)
 		//db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
 		return c.SendString("Approved request")
