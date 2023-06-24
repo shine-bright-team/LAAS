@@ -20,7 +20,7 @@ func GetAgreemnt(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 	var user dbmodel.User
-	if res := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).First(user); res.Error != nil {
+	if res := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).First(&user); res.Error != nil {
 		log.Print(res.Error)
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
