@@ -14,7 +14,7 @@ type Contract struct {
 	BorrowerUserId uint    `gorm:"not null"`
 	LoanAmount     float64 `gorm:"not null"`
 	SignedAt       time.Time
-	DueAt          time.Time
+	DueAt          *time.Time
 	IsApproved     bool          `gorm:"default:false"`
 	ContractFile   string        `gorm:"not null"`
 	Transactions   []Transaction `gorm:"foreignKey:ContractId"`

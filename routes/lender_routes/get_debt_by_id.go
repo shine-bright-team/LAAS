@@ -85,7 +85,7 @@ func GetDebtById(c *fiber.Ctx) error {
 			RequestedAmount: contract.LoanAmount,
 			RemainingAmount: &contract.RemainingAmount,
 			RequestedAt:     contract.CreatedAt,
-			DueDate:         &contract.DueAt,
+			DueDate:         contract.DueAt,
 			PayChannel:      nil,
 			PayNumber:       nil,
 			DebtAnalysis:    nil,
