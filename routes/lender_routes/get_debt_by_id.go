@@ -50,6 +50,19 @@ func GetDebtById(c *fiber.Ctx) error {
 
 	var transactions []dbmodel.Transaction
 
+	var aggregatedReview BorrowReviewAggregate
+
+	if result := db.DB.Raw("select avg(score) as score, count(*) as review_count from reviews where reviewed_user_id = ?;", contract.BorrowerUserId).Scan(&aggregatedReview); result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			aggregatedReview = BorrowReviewAggregate{
+				Score:       0,
+				ReviewCount: 0,
+			}
+		} else {
+			return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
+		}
+	}
+
 	if result := db.DB.Model(&dbmodel.Transaction{}).Where("contract_id = ?", debtId).Find(&transactions); result.Error != nil {
 		log.Printf("Error: %v", result.Error)
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
@@ -89,7 +102,10 @@ func GetDebtById(c *fiber.Ctx) error {
 			PayChannel:      nil,
 			PayNumber:       nil,
 			DebtAnalysis:    nil,
-			Reviews:         nil,
+			Reviews: &globalmodels.ReviewResponse{
+				ReviewAverage: aggregatedReview.Score,
+				ReviewCount:   aggregatedReview.ReviewCount,
+			},
 		},
 		Transactions: transactionsResponse,
 	}
