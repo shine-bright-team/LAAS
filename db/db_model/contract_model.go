@@ -22,4 +22,5 @@ type Contract struct {
 	Lender           User          `gorm:"foreignKey:LenderUserId"`
 	Agreement        Agreement     `gorm:"foreignKey:AgreementId"`
 	TransactionImage *[]byte       `gorm:"default:null"`
+	SignatureImage   *[]byte       `gorm:"default:null"`
 }
