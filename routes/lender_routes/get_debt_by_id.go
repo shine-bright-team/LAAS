@@ -8,6 +8,7 @@ import (
 	globalmodels "github.com/shine-bright-team/LAAS/v2/global_models"
 	"gorm.io/gorm"
 	"log"
+	"math"
 	"strconv"
 	"time"
 )
@@ -87,6 +88,7 @@ func GetDebtById(c *fiber.Ctx) error {
 			Status:       status,
 		})
 	}
+	contract.RemainingAmount = math.Round(contract.RemainingAmount*100) / 100
 
 	response := getDebtByIdResponse{
 		DebtDetail: globalmodels.BorrowRequestResponse{
@@ -95,7 +97,7 @@ func GetDebtById(c *fiber.Ctx) error {
 			UserId:          contract.BorrowerUserId,
 			Firstname:       contract.Firstname,
 			Lastname:        contract.Lastname,
-			RequestedAmount: contract.LoanAmount,
+			RequestedAmount: math.Round(contract.LoanAmount*100) / 100,
 			RemainingAmount: &contract.RemainingAmount,
 			RequestedAt:     contract.CreatedAt,
 			DueDate:         contract.DueAt,
