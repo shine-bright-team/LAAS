@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"time"
 )
@@ -47,6 +48,10 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		contract.IsApproved = *data.IsApproved
 		contract.DueAt = &DueAtTime
 		db.DB.Save(&contract)
+		// Mock Transaction
+		if err := mock.SendTransactionWhenRequestAccepted(contract.ID); err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Your request is approved but there is an error mocking fake transactions.")
+		}
 		//db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
 		return c.SendString("Approved request")
 	}

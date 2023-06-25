@@ -1,10 +1,13 @@
 package userroutes
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
+	"gorm.io/gorm"
 	"regexp"
 	"time"
 )
@@ -29,10 +32,24 @@ func UploadKyc(c *fiber.Ctx) error {
 	if birthDate.After(time.Now()) {
 		return c.Status(fiber.StatusBadRequest).SendString("Birthdate must be in the past")
 	}
-	kyc := &dbmodel.Kyc{UserId: uint(userId), Address: data.Address, Birthdate: &birthDate, IsApproved: false, IdCard: data.IdCard}
-	result := db.DB.Create(kyc)
-	if result.Error != nil {
+	kyc := &dbmodel.Kyc{
+		UserId:     uint(userId),
+		Birthdate:  &birthDate,
+		Address:    data.Address,
+		IdCard:     data.IdCard,
+		IsApproved: false,
+	}
+
+	if result := db.DB.Create(kyc); result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+			return c.Status(fiber.StatusBadRequest).SendString("You already upload your kyc")
+		}
+
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error in our database")
+	}
+	// Assign borrower request
+	if err := mock.AssignBorrowerRequest(uint(userId)); err != nil {
+		return err
 	}
 	return c.JSON(kyc)
 }
