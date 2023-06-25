@@ -5,7 +5,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
-	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"gorm.io/gorm"
 	"regexp"
@@ -48,8 +47,6 @@ func UploadKyc(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error in our database")
 	}
 	// Assign borrower request
-	if err := mock.AssignBorrowerRequest(uint(userId)); err != nil {
-		return err
-	}
+
 	return c.JSON(kyc)
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"gorm.io/gorm"
 )
@@ -51,6 +52,10 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 	}
 	if result := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).Update("pay_channel", data.PaymentChannel).Update("pay_number", data.PaymentNumber); result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
+	}
+
+	if err := mock.AssignBorrowerRequest(uint(userId)); err != nil {
+		return err
 	}
 
 	return c.JSON(data)
