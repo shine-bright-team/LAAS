@@ -21,7 +21,7 @@ type Transaction struct {
 	PaidAmount float64   `gorm:"not null"`
 	PaidAt     time.Time `gorm:"not null"`
 	ErrMessage *string   `gorm:"default:null"`
-	IsApproved bool      `gorm:"defaukt:false"`
+	IsApproved bool      `gorm:"default:false"`
 	// IsApproved TransactionStatus `sql:"type:ENUM('Pending','Error','Success')" gorm:"column:isApproved"`
 	Contract Contract `gorm:"foreignKey:ContractId"`
 }

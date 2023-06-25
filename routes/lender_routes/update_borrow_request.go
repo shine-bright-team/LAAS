@@ -10,8 +10,9 @@ import (
 )
 
 type updateBorrowRequest struct {
-	ContractId int   `json:"contract_id" validate:"required"`
-	IsApproved *bool `json:"is_approved" validate:"required"`
+	ContractId int     `json:"contract_id" validate:"required"`
+	IsApproved *bool   `json:"is_approved" validate:"required"`
+	Image      *[]byte `json:"image"`
 }
 
 // lender/borrower/request
@@ -44,9 +45,13 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		db.DB.Delete(&dbmodel.Contract{}, data.ContractId)
 		return c.SendString("Decline request")
 	} else {
+		if data.Image == nil {
+			return c.Status(fiber.StatusBadRequest).SendString("Image is required")
+		}
 		DueAtTime := time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
 		contract.IsApproved = *data.IsApproved
 		contract.DueAt = &DueAtTime
+		contract.TransactionImage = data.Image
 		db.DB.Save(&contract)
 		// Mock Transaction
 		if err := mock.SendTransactionWhenRequestAccepted(contract.ID); err != nil {
