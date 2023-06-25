@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func SendTransactionWhenRequestAccepted(contractId string) error {
+func SendTransactionWhenRequestAccepted(contractId uint) error {
 	var contract dbmodel.Contract
 	if result := db.DB.Preload("Borrower").Where("id", contractId).First(&contract); result.Error != nil {
 		return result.Error

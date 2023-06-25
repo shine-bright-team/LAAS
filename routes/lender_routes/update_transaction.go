@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"gorm.io/gorm"
 )
@@ -49,6 +50,12 @@ func UpdateTransaction(c *fiber.Ctx) error {
 	}
 
 	db.DB.Save(&transaction)
+
+	if !(*data.IsApproved) {
+		if err := mock.ResendTransaction(transaction.ID, transaction.PaidAmount); err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Your transaction has been updated but the new transactions could not be mock.")
+		}
+	}
 
 	return c.SendString("Transaction is updated successfully")
 }
