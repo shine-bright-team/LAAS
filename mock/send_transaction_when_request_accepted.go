@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
-func SendTransaction(contract_id string) error {
+func SendTransactionWhenRequestAccepted(contractId uint) error {
 	var contract dbmodel.Contract
-	if result := db.DB.Preload("Borrower").Where("id", contract_id).First(&contract); result.Error != nil {
+	if result := db.DB.Preload("Borrower").Where("id", contractId).First(&contract); result.Error != nil {
 		return result.Error
 	}
-	transcations := make([]dbmodel.Transaction, 0)
+	transactions := make([]dbmodel.Transaction, 0)
 	money := contract.LoanAmount
 	for money > 0 {
 		newTransaction := dbmodel.Transaction{
@@ -27,9 +27,9 @@ func SendTransaction(contract_id string) error {
 		} else {
 			money -= 50
 		}
-		transcations = append(transcations, newTransaction)
+		transactions = append(transactions, newTransaction)
 	}
-	if result := db.DB.Create(&transcations); result.Error != nil {
+	if result := db.DB.Create(&transactions); result.Error != nil {
 		return result.Error
 	}
 	return nil

@@ -4,13 +4,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"github.com/shine-bright-team/LAAS/v2/mock"
 	"github.com/shine-bright-team/LAAS/v2/utils"
 	"time"
 )
 
 type updateBorrowRequest struct {
-	ContractId int   `json:"contract_id" validate:"required"`
-	IsApproved *bool `json:"is_approved" validate:"required"`
+	ContractId int     `json:"contract_id" validate:"required"`
+	IsApproved *bool   `json:"is_approved" validate:"required"`
+	Image      *[]byte `json:"transaction_image"`
+	Signature  *[]byte `json:"signature_image"`
 }
 
 // lender/borrower/request
@@ -43,10 +46,19 @@ func UpdateBorrowRequest(c *fiber.Ctx) error {
 		db.DB.Delete(&dbmodel.Contract{}, data.ContractId)
 		return c.SendString("Decline request")
 	} else {
+		if data.Image == nil || data.Signature == nil {
+			return c.Status(fiber.StatusBadRequest).SendString("Image is required")
+		}
 		DueAtTime := time.Now().Add(time.Hour * 24 * 30 * time.Duration(contract.Agreement.DueIn))
 		contract.IsApproved = *data.IsApproved
 		contract.DueAt = &DueAtTime
+		contract.TransactionImage = data.Image
+		contract.SignatureImage = data.Signature
 		db.DB.Save(&contract)
+		// Mock Transaction
+		if err := mock.SendTransactionWhenRequestAccepted(contract.ID); err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Your request is approved but there is an error mocking fake transactions.")
+		}
 		//db.DB.Model(&contract).Where("id", data.ContractId).Update("is_approved", data.IsApproved)
 		return c.SendString("Approved request")
 	}

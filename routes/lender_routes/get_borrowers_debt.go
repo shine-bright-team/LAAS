@@ -22,7 +22,7 @@ func GetBorrowersDebt(c *fiber.Ctx) error {
 
 	var contracts []contractWithRemaining
 
-	if result := db.DB.Raw("SELECT *, loan_amount - (select COALESCE(sum(transactions.paid_amount),0) from transactions where contract_id = contracts.id) as remaining_amount from contracts join users u on u.id = contracts.borrower_user_id where lender_user_id = ? AND is_approved = true;", userId).Scan(&contracts); result.Error != nil {
+	if result := db.DB.Raw("SELECT *, loan_amount - (select COALESCE(sum(transactions.paid_amount),0) from transactions where contract_id = contracts.id and transactions.is_approved = true) as remaining_amount from contracts join users u on u.id = contracts.borrower_user_id where lender_user_id = ? AND is_approved = true;", userId).Scan(&contracts); result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("There is an error from our side please try again later")
 	}
 

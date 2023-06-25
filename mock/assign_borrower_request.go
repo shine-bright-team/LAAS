@@ -7,6 +7,7 @@ import (
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
 	"golang.org/x/exp/rand"
 	"gorm.io/gorm"
+	"log"
 	"math"
 	"time"
 )
@@ -40,6 +41,7 @@ func AssignBorrowerRequest(ownerUserId uint) error {
 		})
 	}
 	if result := db.DB.Create(&contracts); result.Error != nil {
+		log.Print(result.Error)
 		return result.Error
 	}
 	return nil
