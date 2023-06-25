@@ -8,5 +8,6 @@ import (
 // /lender/debt
 func LenderDebtGroup(router fiber.Router) {
 	router.Get("/:debtId", lender_routes.GetDebtById)
+	router.Get("/:debtId/:transactionId/image", lender_routes.GetTransactionPic)
 	router.Patch("/transaction", lender_routes.UpdateTransaction)
 }
