@@ -5,7 +5,7 @@ import (
 )
 
 func GetTransactionPic(c *fiber.Ctx) error {
-	return c.Redirect("https://www.mydegage.com/wp-content/uploads/2020/12/SCB-slip.jpg")
+	return c.Redirect("https://cloud.thistine.com/apps/files_sharing/publicpreview/XeNPMkDS8kJMbzw?file=/&fileId=1850&x=1920&y=1080&a=true")
 
 	//i := strings.Index(img, ",")
 	//if i < 0 {
