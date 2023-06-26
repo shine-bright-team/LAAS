@@ -52,7 +52,7 @@ func UpdateTransaction(c *fiber.Ctx) error {
 	db.DB.Save(&transaction)
 
 	if !(*data.IsApproved) {
-		if err := mock.ResendTransaction(transaction.ID, transaction.PaidAmount); err != nil {
+		if err := mock.ResendTransaction(transaction.ContractId, transaction.PaidAmount); err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString("Your transaction has been updated but the new transactions could not be mock.")
 		}
 	}
