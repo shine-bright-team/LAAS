@@ -50,8 +50,16 @@ func CreateLenderPreference(c *fiber.Ctx) error {
 		}
 		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
 	}
-	if result := db.DB.Model(&dbmodel.User{}).Where("id = ?", userId).Update("pay_channel", data.PaymentChannel).Update("pay_number", data.PaymentNumber); result.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
+	var user dbmodel.User
+
+	if result := db.DB.Model(&dbmodel.User{}).First(&user, userId); result.Error != nil {
+		return c.Status(fiber.StatusNotFound).SendString("User not found")
+	} else {
+		user.PayChannel = data.PaymentChannel
+		user.PayNumber = data.PaymentNumber
+		if updateResult := db.DB.Save(&user); updateResult.Error != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Database Error")
+		}
 	}
 
 	if err := mock.AssignBorrowerRequest(uint(userId)); err != nil {
