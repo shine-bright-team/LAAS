@@ -27,7 +27,7 @@ func AssignBorrowerRequest(ownerUserId uint) error {
 	}
 	contracts := make([]dbmodel.Contract, 0)
 	minLoanAmount := 100.0
-	maxLoanAmount := 3000.0
+	maxLoanAmount := 300.0
 	for i := range nonLenderUsers {
 		contracts = append(contracts, dbmodel.Contract{
 			AgreementId:    ownerUserAgreement.ID,
