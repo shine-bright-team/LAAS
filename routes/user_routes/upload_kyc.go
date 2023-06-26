@@ -36,7 +36,7 @@ func UploadKyc(c *fiber.Ctx) error {
 		Birthdate:  &birthDate,
 		Address:    data.Address,
 		IdCard:     data.IdCard,
-		IsApproved: false,
+		IsApproved: true,
 	}
 
 	if result := db.DB.Create(kyc); result.Error != nil {
