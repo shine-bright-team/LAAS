@@ -3,6 +3,7 @@ package mock
 import (
 	"github.com/shine-bright-team/LAAS/v2/db"
 	dbmodel "github.com/shine-bright-team/LAAS/v2/db/db_model"
+	"math"
 	"time"
 )
 
@@ -22,7 +23,7 @@ func SendTransactionWhenRequestAccepted(contractId uint) error {
 			IsApproved: false,
 		}
 		if money < 50 {
-			newTransaction.PaidAmount = money
+			newTransaction.PaidAmount = math.Round(money*100) / 100
 			money = 0
 		} else {
 			money -= 50
