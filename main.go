@@ -21,7 +21,7 @@ func main() {
 
 	if !fiber.IsChild() {
 		for {
-			time.Sleep(5 * time.Hour * 24)
+			time.Sleep(time.Hour * 24)
 			log.Print("Adding Interest Rate to Load")
 			utils.AddInterestRateToLoad()
 		}
